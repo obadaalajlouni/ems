@@ -1,5 +1,6 @@
 package department;
 
+import com.example.Ems.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,11 @@ public class DepartmentService {
      return departmentRepo.save(department);
 
  }
+
+    public void deleteById(Integer id) {
+        departmentRepo.deleteById(id);
+    }
+    public Department update(Department department){
+        return departmentRepo.save(department);
+    }
 }

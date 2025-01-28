@@ -31,4 +31,8 @@ public class EmployeeService {
         return employeeRepo.save(employee);
     }
 
+    public String deleteEmployee(Integer id) {
+          employeeRepo.deleteById(id);
+        return "Employee deleted successfully";
+    }
 }

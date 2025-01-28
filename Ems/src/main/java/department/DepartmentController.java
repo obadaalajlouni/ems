@@ -22,4 +22,12 @@ private  DepartmentService departmentService;
         return departmentService.addDepartment(department);
 
     }
+    @DeleteMapping
+    public void delete(Integer id) {
+        departmentService.deleteById(id);
+    }
+    @PutMapping("{id}")
+    public Department updateDepartment (Department department) {
+        return departmentService.update(department);
+    }
 }
