@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: Ems
+    image: postgres
+    environment:
+      POSTGRES_USER: Obada
+      POSTGRES_PASSWORD: 12345
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "1233:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
