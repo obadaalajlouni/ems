@@ -1,4 +1,4 @@
-package department;
+package com.example.Ems.department;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +12,14 @@ public class DepartmentController {
 private  DepartmentService departmentService;
 
     @GetMapping
- public List<Department> getAllDepartments() {
-        return departmentService.getAllDepartments();
+ public List<DepartmentResponse> getAllDepartments() {
+        return departmentService.departments();
 
     }
     @PostMapping
 
-    public Department addDepartment(@RequestBody Department department) {
-        return departmentService.addDepartment(department);
+    public DepartmentResponse addDepartment(@RequestBody DepartmentRequest departmentRequest) {
+        return departmentService.addDepartment(departmentRequest);
 
     }
     @DeleteMapping

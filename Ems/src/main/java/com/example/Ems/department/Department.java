@@ -1,6 +1,6 @@
-package department;
+package com.example.Ems.department;
 
-import com.example.Ems.Employee;
+import com.example.Ems.Employee.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +18,6 @@ strategy = GenerationType.SEQUENCE
     private Integer id;
     private String name;
     private String description;
-@OneToMany
+    @OneToMany(mappedBy = "empId")
     private List<Employee> employees;
 }

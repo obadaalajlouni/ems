@@ -1,6 +1,6 @@
-package com.example.Ems;
+package com.example.Ems.Employee;
 
-import department.Department;
+import com.example.Ems.department.Department;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,6 +9,7 @@ import lombok.Data;
 @Table(name= "EMPLOYEES")
 public class Employee {
     @Id
+    @Column(name= "empId")
     private Integer empId;
     private String empName;
     private String empSurname;
@@ -18,5 +19,6 @@ public class Employee {
     private String empPhone;
 
     @ManyToOne
+    @JoinColumn(name = "employee_id")
     private Department department;
 }

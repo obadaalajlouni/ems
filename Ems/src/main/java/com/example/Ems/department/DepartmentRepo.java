@@ -1,4 +1,4 @@
-package department;
+package com.example.Ems.department;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

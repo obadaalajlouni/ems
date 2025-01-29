@@ -1,12 +1,9 @@
-package com.example.Ems;
+package com.example.Ems.Employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1")
@@ -19,12 +16,12 @@ public class EmployeeController {
     }
 
     @GetMapping ("employee")
-    public List<Employee> getEmployee(){
+    public List<EmployeeResponse > getEmployee(){
         return employeeService.employeeList();
     }
     @PostMapping
-    public Employee save( @RequestBody Employee employee) {
-        return employeeService.save(employee);
+    public EmployeeResponse save( @RequestBody EmployeeRequest employeeRequest) {
+        return employeeService.save(employeeRequest);
     }
     @DeleteMapping
     public void delete(Integer id) {
@@ -32,12 +29,14 @@ public class EmployeeController {
     }
 
     @GetMapping("{id}")
-    public Employee getById(@PathVariable Integer id) {
+    public Employee getById(@PathVariable Integer id)
+    {
         return employeeService.findById(id);
     }
 
     @PutMapping("{id}")
-    public Employee updateEmployee (Employee employee) {
+    public Employee updateEmployee (Employee employee)
+    {
         return employeeService.update(employee);
     }
 
