@@ -2,10 +2,14 @@ package com.example.Ems.Employee;
 
 import com.example.Ems.department.Department;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name= "EMPLOYEES")
 public class Employee {
     @Id
@@ -21,4 +25,8 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Department department;
+
+    @ManyToMany(mappedBy = "employees")
+    private List<Employee> employees;
+
 }

@@ -1,6 +1,7 @@
 package com.example.Ems.Employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,33 +12,32 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    public String employee(){
-       return   employeeService.employeeService();
-    }
+
 
     @GetMapping ("employee")
-    public List<EmployeeResponse > getEmployee(){
-        return employeeService.employeeList();
+    public ResponseEntity<List<EmployeeResponse >> getEmployee(){
+        return ResponseEntity.ok(employeeService.getEmployee)
     }
     @PostMapping
-    public EmployeeResponse save( @RequestBody EmployeeRequest employeeRequest) {
-        return employeeService.save(employeeRequest);
+    public ResponseEntity<EmployeeResponse> save( @RequestBody EmployeeRequest employeeRequest) {
+        return ResponseEntity.ok(employeeService.save(employeeRequest));
     }
-    @DeleteMapping
-    public void delete(Integer id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<void> delete(@PathVariable  Integer id) {
         employeeService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("{id}")
-    public Employee getById(@PathVariable Integer id)
+    public ResponseEntity <Employee> getById(@PathVariable Integer id)
     {
-        return employeeService.findById(id);
+        return ResponseEntity.ok(employeeService.findById(id));
     }
 
     @PutMapping("{id}")
-    public Employee updateEmployee (Employee employee)
+    public  ResponseEntity<Employee >updateEmployee (@PathVariable Integer id , @RequestBody EmployeeRequest employeeRequest)
     {
-        return employeeService.update(employee);
+        return ResponseEntity.ok( employeeService.update(id ,employeeRequest));
     }
 
 
