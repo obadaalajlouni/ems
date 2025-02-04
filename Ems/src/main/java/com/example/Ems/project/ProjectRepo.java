@@ -1,6 +1,9 @@
 package com.example.Ems.project;
 
 import org.hibernate.type.descriptor.converter.spi.JpaAttributeConverter;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ProjectRepo  extends JpaAttributeConverter< Project, Integer> {
+@Repository
+public interface ProjectRepo  extends JpaRepository< Project, Integer> {
 }

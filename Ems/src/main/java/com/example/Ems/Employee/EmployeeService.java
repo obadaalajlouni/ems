@@ -11,6 +11,7 @@ import org.springframework.web.filter.RequestContextFilter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class EmployeeService {
     private final DepartmentRepo departmentRepo;
     private final EmployeeRepo employeeRepo;
     private final RequestContextFilter requestContextFilter;
+    private final ProjectRepo projectRepo;
 
 //    public String employeeService (){
 //        return "Employee Service";
@@ -36,11 +38,11 @@ public class EmployeeService {
 //            employeeResponse.setEmpSurname(employee.getEmpSurname());
 ////            employeeResponse.setDepartment(employee.getDepartment());
 //            employeesResponse.add(employeeResponse);
-        return employeeRepo.findAll().stream().map(this::mapToResponse).collect(collectors.toList());
+        return employeeRepo.findAll().stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
-    public EmployeeResponse getStudentById(Long id) {
-        return EmployeeRepo.findById(id)
+    public EmployeeResponse getEmployeeById (Integer id) {
+        return employeeRepo.findById(id)
                 .map(this::mapToResponse)
                 .orElseThrow(() -> new RuntimeException("Empolyee not found with id: " + id));
     }
@@ -62,25 +64,24 @@ public class EmployeeService {
 //         employeeResponse.setEmpName(employee1.getEmpName());
 //         employeeResponse.setDepartment(employee1.getDepartment());
 //         return employeeResponse;
-        Department department =departmentRepo.findById(employeeRequest.getDepartment())
+        Department department =departmentRepo.findById(employeeRequest.getDepartment().getId())
                 .orElseThrow(()->new RuntimeException("Department not found" ));
 
         List<Project> projects = new ArrayList<>();
-        for(Integer id : request.getProjectId()){
-            Project project = ProjectRepo.findById(id).orElse(null);
+        for(Integer id : employeeRequest.getProjectId()){
+            Project project = projectRepo.findById(id).orElse(null);
             if(project != null){
                 projects.add(project);
             }
         }
 
       Employee employee = Employee.builder()
-                .empName(request.getempName())
-                .empSurmName(request.getLastName())
+                .empName(employeeRequest.getEmpName())
+                .empSurname(employeeRequest.getEmpSurname())
                 .department(department)
-                .project(project)
                 .build();
 
-       Employee =EmployeeRepo.save(employee);
+       employeeRepo.save(employee);
         return mapToResponse(employee);
     }
 
@@ -92,15 +93,15 @@ public class EmployeeService {
         employeeRepo.deleteById(id);
     }
 
-    public EmployeeResponse update(Integer id, Employee employee) {
-        Employee employee1 = employeeRepo.findById(id)
+    public EmployeeResponse update(Integer id, EmployeeRequest request) {
+        Employee employee = employeeRepo.findById(id)
                 .orElseThrow(()->new RuntimeException("Employee not found with id: " ));
-        Department department= DepartmentRepo.findByid(request.getDepartment())
-                .orElseThrow(()->runTimeException("Department not found"));
+        Department department= departmentRepo.findById(request.getDepartment().getId())
+                .orElseThrow(()-> new RuntimeException("Department not found"));
         employee.setEmpName(request.getEmpName());
         employee.setEmpPhone(request.getEmpPhone());
-        employee.setEmpEmail(request.getEmail());
-        employee.setEmpSurname(reqest.getSurname());
+        employee.setEmpEmail(request.getEmpEmail());
+        employee.setEmpSurname(request.getEmpSurname());
          employee =employeeRepo.save(employee);
          return  mapToResponse(employee);
     }
@@ -108,5 +109,8 @@ public class EmployeeService {
     public String deleteEmployee(Integer id) {
         employeeRepo.deleteById(id);
         return "Employee deleted successfully";
+    }
+    public EmployeeResponse mapToResponse(Employee employee) {
+        return  new EmployeeResponse();
     }
 }

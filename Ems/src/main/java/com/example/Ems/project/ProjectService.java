@@ -1,5 +1,10 @@
 package com.example.Ems.project;
 
+import com.example.Ems.Employee.Employee;
+import com.example.Ems.Employee.EmployeeRepo;
+import com.example.Ems.Employee.EmployeeRequest;
+import com.example.Ems.Employee.EmployeeResponse;
+import com.example.Ems.department.Department;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +24,8 @@ public class ProjectService {
 
         ProjectResponse response = ProjectResponse.builder()
                 .id(project.getId())
-                .Name(Project.getName())
-                .Description(Project.getDescription())
+                .Name(project.getName())
+                .Description(project.getDescription())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -31,10 +36,29 @@ public class ProjectService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("project not found");
         }
         ProjectResponse response = ProjectResponse.builder()
-                .id(Project.getId())
-                .firstName(Project.getName())
-                .lastName(Project.getDescription())
+                .id(project.getId())
+                .Name(project.getName())
+                .Description(project.getDescription())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    public String deleteProject(Integer id){
+        projectRepo.deleteById(id);
+        return "Project deleted successfully";
+    }
+    public ProjectResponse update(Integer id, ProjectRequest request) {
+
+        Project projects = projectRepo.findById(id)
+                .orElseThrow(()->new RuntimeException("Project not found with id: " ));
+       projects.setName(request.getName());
+        projects.setDescription(request.getDescription());
+        projects =projectRepo.save(projects);
+        return  mapToResponse(projects);
+    }
+    public ProjectResponse mapToResponse(Project projects) {
+        return  new  ProjectResponse();
+    }
+//    public Project updateProject(Project project) {
+//        return projectRepo.save(project);
+//    }
 }
