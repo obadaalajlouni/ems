@@ -56,9 +56,12 @@ public class ProjectService {
         return  mapToResponse(projects);
     }
     public ProjectResponse mapToResponse(Project projects) {
-        return  new  ProjectResponse();
+        ProjectResponse response = ProjectResponse.builder()
+                .id(projects.getId())
+                .Name(projects.getName())
+                .Description(projects.getDescription())
+                .build();
+        return response;
     }
-//    public Project updateProject(Project project) {
-//        return projectRepo.save(project);
-//    }
+//
 }
