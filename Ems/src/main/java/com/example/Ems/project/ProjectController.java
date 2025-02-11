@@ -2,6 +2,7 @@ package com.example.Ems.project;
 
 import com.example.Ems.Employee.EmployeeRequest;
 import com.example.Ems.Employee.EmployeeResponse;
+import com.example.Ems.configuration.NotFoundInDatabaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +20,18 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProjectById(@PathVariable Integer id) {
+    public ResponseEntity<?> getProjectById(@PathVariable Integer id) throws NotFoundInDatabaseException {
         return projectService.findById(id);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable  Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable  Integer id) throws NotFoundInDatabaseException {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
     @PutMapping("{id}")
-    public  ResponseEntity<ProjectResponse>updateProject (@PathVariable Integer id , @RequestBody ProjectRequest request)
-    {
+    public  ResponseEntity<ProjectResponse>updateProject (@PathVariable Integer id , @RequestBody ProjectRequest request) throws NotFoundInDatabaseException {
         return ResponseEntity.ok( projectService.update(id ,request));
     }
+
+
 }

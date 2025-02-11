@@ -1,11 +1,15 @@
 package com.example.Ems.Employee;
 
+import com.example.Ems.configuration.NotFoundInDatabaseException;
 import com.example.Ems.department.Department;
 import com.example.Ems.department.DepartmentRepo;
 import com.example.Ems.project.Project;
 import com.example.Ems.project.ProjectRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.RequestContextFilter;
 
@@ -85,24 +89,33 @@ public class EmployeeService {
         return mapToResponse(employee);
     }
 
-    public Employee findById(Integer id) {
-        return employeeRepo.findById(id).orElse(null);
+    public ResponseEntity<?> findById(Integer id) throws NotFoundInDatabaseException {
+        Employee employee =employeeRepo.findById(id).orElseThrow(()->new NotFoundInDatabaseException("Employee not found with id: " + id));
+        EmployeeResponse employeeResponse =mapToResponse(employee);
+        return ResponseEntity.status(HttpStatus.OK).body(employeeResponse);
+//        return employeeRepo.findById(id).orElse(null);
     }
 
-    public void deleteById(Integer id) {
+    public ResponseEntity<?> deleteById(Integer id) throws NotFoundInDatabaseException {
+
+         Employee employee =employeeRepo.findById(id).orElseThrow(()-> new NotFoundInDatabaseException("Project not found"));
+        if(employee == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found");
+        }
         employeeRepo.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    public EmployeeResponse update(Integer id, EmployeeRequest request) {
+    public EmployeeResponse update(Integer id, EmployeeRequest request) throws NotFoundInDatabaseException{
         Employee employee = employeeRepo.findById(id)
-                .orElseThrow(()->new RuntimeException("Employee not found with id: " ));
+                .orElseThrow(()-> new NotFoundInDatabaseException(" Employee not found"));
         Department department= departmentRepo.findById(request.getDepartment().getId())
-                .orElseThrow(()-> new RuntimeException("Department not found"));
+                .orElseThrow(()-> new NotFoundInDatabaseException("Department not found"));
         employee.setEmpName(request.getEmpName());
         employee.setEmpPhone(request.getEmpPhone());
         employee.setEmpEmail(request.getEmpEmail());
         employee.setEmpSurname(request.getEmpSurname());
-         employee =employeeRepo.save(employee);
+         employee = employeeRepo.save(employee);
          return  mapToResponse(employee);
     }
 

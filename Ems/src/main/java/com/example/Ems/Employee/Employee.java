@@ -1,6 +1,7 @@
 package com.example.Ems.Employee;
 
 import com.example.Ems.department.Department;
+import com.example.Ems.project.Project;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,6 @@ public class Employee {
     private Department department;
 
     @ManyToMany(mappedBy = "employees")
-    private List<Employee> employees;
+    private List<Project> projects;
 
 }

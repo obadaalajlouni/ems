@@ -1,9 +1,9 @@
 package com.example.Ems.Employee;
 
+import com.example.Ems.configuration.NotFoundInDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -23,19 +23,18 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.save(employeeRequest));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable  Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable  Integer id) throws NotFoundInDatabaseException {
         employeeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity <Employee> getById(@PathVariable Integer id)
-    {
+    public ResponseEntity <?> getById(@PathVariable Integer id) throws NotFoundInDatabaseException {
         return ResponseEntity.ok(employeeService.findById(id));
     }
 
     @PutMapping("{id}")
-    public  ResponseEntity<EmployeeResponse >updateEmployee (@PathVariable Integer id , @RequestBody EmployeeRequest employeeRequest)
+    public  ResponseEntity<? >updateEmployee (@PathVariable Integer id , @RequestBody EmployeeRequest employeeRequest)throws NotFoundInDatabaseException
     {
         return ResponseEntity.ok( employeeService.update(id ,employeeRequest));
     }
