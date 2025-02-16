@@ -2,8 +2,12 @@ package com.example.Ems.department;
 
 import com.example.Ems.Employee.Employee;
 import com.example.Ems.Employee.EmployeeResponse;
+import com.example.Ems.Employee.EmployeeService;
 import com.example.Ems.configuration.NotFoundInDatabaseException;
+import com.example.Ems.configuration.ObjectNotValidException;
 import com.example.Ems.project.Project;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import java.util.List;
 public class DepartmentService {
     @Autowired
     private DepartmentRepo departmentRepo;
+    private final Validator validator;
 
     public List<DepartmentResponse> departments() {
         List<Department> department1 = departmentRepo.findAll();
@@ -41,6 +46,7 @@ public class DepartmentService {
 
     public DepartmentResponse addDepartment(DepartmentRequest departmentRequest) {
         //map departmenRequest to department
+        validator.validate(departmentRequest);
         Department department = new Department();
         department.setName(departmentRequest.getName());
         department.setDescription(departmentRequest.getDescription());
@@ -68,6 +74,7 @@ public class DepartmentService {
 
     public ResponseEntity <?>update( Integer id ,DepartmentRequest request )throws NotFoundInDatabaseException {
         Department department = departmentRepo.findById(id).orElseThrow(()-> new NotFoundInDatabaseException("Project not found"));
+validator.validate(request);
         department.setName(request.getName());
         department.setDescription(request.getDescription());
         department =  departmentRepo.save(department);

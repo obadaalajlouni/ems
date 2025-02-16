@@ -14,4 +14,12 @@ public class GlobalExceptionHandler {
                         ex.getMessage()
                 );
     }
+    @ExceptionHandler(ObjectNotValidException.class)
+    public ResponseEntity<?> handleException(ObjectNotValidException ex){
+        System.out.println("handleException");
+        return ResponseEntity
+                .badRequest().body(
+                        ex.getMessage()
+                );
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/project")
+@RequestMapping("/api/v1/project")
 @RequiredArgsConstructor
 public class ProjectController {
     private final  ProjectService projectService;
@@ -24,9 +24,9 @@ public class ProjectController {
         return projectService.findById(id);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable  Integer id) throws NotFoundInDatabaseException {
-        projectService.deleteProject(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable  Integer id) throws NotFoundInDatabaseException {
+       return projectService.deleteProject(id);
+
     }
     @PutMapping("{id}")
     public  ResponseEntity<ProjectResponse>updateProject (@PathVariable Integer id , @RequestBody ProjectRequest request) throws NotFoundInDatabaseException {
